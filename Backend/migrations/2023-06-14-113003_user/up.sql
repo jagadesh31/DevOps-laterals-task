@@ -4,4 +4,4 @@ CREATE TABLE users (
   user_name VARCHAR NOT NULL,
   user_email VARCHAR NOT NULL,
   user_password VARCHAR NOT NULL
-)
+);
