@@ -7,7 +7,6 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-
 COPY Cargo.toml Cargo.lock ./
 RUN mkdir src && echo "fn main() { println!(\"build deps\"); }" > src/main.rs
 RUN cargo build --release
@@ -15,7 +14,6 @@ RUN rm -rf src
 
 
 COPY . .
-
 
 RUN cargo build --release --bin login-app-backend
 
