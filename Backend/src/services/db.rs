@@ -6,16 +6,30 @@ use crate::DbError;
 use crate::models::models::{NewUser,User, CreateUser, UpdateUser,Login,Response};
 use dotenvy::dotenv;
 
+use std::{thread, time::Duration};
+
 pub fn get_connection_pool() -> Pool<ConnectionManager<PgConnection>> {
     dotenv().ok();
-    let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL");
-    // let database_url = String::from("postgres://postgres:Try2read@localhost:5432/rust_server");
+
+    let database_url =
+        std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+
     let manager = ConnectionManager::<PgConnection>::new(database_url);
-        let pool = Pool::builder()
-        .build(manager)
-        .expect("Failed to create pool.");
-    return pool;
+
+    loop {
+        match Pool::builder().build(manager.clone()) {
+            Ok(pool) => {
+                println!("Database connection pool created");
+                return pool;
+            }
+            Err(e) => {
+                eprintln!("Database not ready yet: {e}. Retrying...");
+                thread::sleep(Duration::from_secs(2));
+            }
+        }
+    }
 }
+
 
 pub fn create_user(conn: &mut PgConnection, info: &mut CreateUser) -> Result<User,DbError> {
     use crate::schema::users;
