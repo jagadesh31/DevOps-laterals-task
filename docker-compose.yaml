@@ -38,6 +38,9 @@ services:
     networks:
       - app-network
     restart: unless-stopped
+    environment:
+      - DANGEROUSLY_DISABLE_HOST_CHECK=true
+
 
   nginx:
     build: ./nginx
