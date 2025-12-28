@@ -30,4 +30,4 @@ COPY --from=builder /app/target/release/login-app-backend /app/backend
 
 EXPOSE 8080
 
-CMD ["./backend"]
+ENTRYPOINT ["./backend"]

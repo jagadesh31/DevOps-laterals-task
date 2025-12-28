@@ -8,7 +8,12 @@ use dotenvy::dotenv;
 
 pub fn get_connection_pool() -> Pool<ConnectionManager<PgConnection>> {
     dotenv().ok();
-    let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL");
+    let database_url = std::env::var("DATABASE_URL")
+    .unwrap_or_else(|_| {
+        eprintln!("ERROR: DATABASE_URL environment variable not set!");
+        eprintln!("Expected format: postgres://user:password@host:port/database");
+        panic!("DATABASE_URL is required but not set");
+    });
     // let database_url = String::from("postgres://postgres:Try2read@localhost:5432/rust_server");
     let manager = ConnectionManager::<PgConnection>::new(database_url);
         let pool = Pool::builder()
