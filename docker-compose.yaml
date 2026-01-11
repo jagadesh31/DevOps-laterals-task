@@ -1,8 +1,7 @@
-version: "3.9"
-
 services:
   db:
     image: postgres:15
+    container_name: database
     environment:
       POSTGRES_DB: rust_server
       POSTGRES_USER: postgres
@@ -19,23 +18,21 @@ services:
     restart: unless-stopped
 
   backend:
-    build: ./Backend
+    image: jagadesh31/backend:${TAG}
     expose:
       - "8080"
     environment:
-     DATABASE_URL: "postgres://postgres:Try2read@db:5432/rust_server"
-     RUST_LOG: "info"
-
+      DATABASE_URL: "postgres://postgres:Try2read@db:5432/rust_server"
+      RUST_LOG: "info"
     depends_on:
       db:
         condition: service_healthy
     networks:
       - app-network
-    # restart: unless-stopped
     restart: on-failure:5
 
   frontend:
-    build: ./Frontend
+    image: jagadesh31/frontend:${TAG}
     expose:
       - "3000"
     networks:
@@ -44,9 +41,8 @@ services:
     environment:
       - DANGEROUSLY_DISABLE_HOST_CHECK=true
 
-
   nginx:
-    build: ./nginx
+    image: jagadesh31/nginx:${TAG}
     ports:
       - "80:80"
     depends_on:
