@@ -7,7 +7,6 @@ pipeline {
   }
 
   stages {
-
     stage('Build Images') {
       steps {
         sh '''
@@ -39,8 +38,8 @@ pipeline {
       steps {
         sh '''
           export TAG=$TAG
-          docker compose pull
-          docker compose up -d
+          docker-compose pull
+          docker-compose up -d
         '''
       }
     }
