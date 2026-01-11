@@ -1,0 +1,27 @@
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: custom-jenkins-docker
+    container_name: jenkins
+    user: root
+    restart: unless-stopped
+
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    ports:
+      - "3333:8080"
+      - "50000:50000"
+
+    networks:
+      - infra_net
+
+volumes:
+  jenkins_home:
+
+networks:
+  infra_net:
+    external: true

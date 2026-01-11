@@ -14,7 +14,7 @@ services:
       timeout: 3s
       retries: 5
     networks:
-      - app-network
+      - infra_net
     restart: unless-stopped
 
   backend:
@@ -28,7 +28,7 @@ services:
       db:
         condition: service_healthy
     networks:
-      - app-network
+      - infra_net
     restart: on-failure:5
 
   frontend:
@@ -36,7 +36,7 @@ services:
     expose:
       - "3000"
     networks:
-      - app-network
+      - infra_net
     restart: unless-stopped
     environment:
       - DANGEROUSLY_DISABLE_HOST_CHECK=true
@@ -49,12 +49,12 @@ services:
       - backend
       - frontend
     networks:
-      - app-network
+      - infra_net
     restart: unless-stopped
 
 volumes:
   pgdata:
 
 networks:
-  app-network:
-    driver: bridge
+  infra_net:
+    external: true
