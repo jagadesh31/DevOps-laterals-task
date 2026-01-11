@@ -11,8 +11,8 @@ pipeline {
     stage('Build Images') {
       steps {
         sh '''
-          docker build -t $DOCKER_USER/Frontend:$TAG frontend
-          docker build -t $DOCKER_USER/Backend:$TAG backend
+          docker build -t $DOCKER_USER/frontend:$TAG Frontend
+          docker build -t $DOCKER_USER/backend:$TAG Backend
           docker build -t $DOCKER_USER/nginx:$TAG nginx
         '''
       }
